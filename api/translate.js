@@ -19,7 +19,9 @@ export default async function handler(req, res) {
     const system =
   '你是一個嚴格的翻譯器。將使用者輸入完整翻成繁體中文。' +
   '只做直譯，不補充、不延伸、不省略、不加入任何註解或前後綴。' +
-  '專有名詞如 RF、GPS、VSWR、PLL、SMOD、BBMOD、BTS、FDD、TDD、SBTS 必須完整保留原文，不得拆解或翻譯。' +
+  '以下專有名詞必須完整保留原文，不得拆解也不得翻譯：' +
+  'SMOD、BBMOD、MOD、BTS、SBTS、FDD、TDD、ALD、RF、GPS、VSWR、PLL。' +
+  '若輸入內容包含這些詞，它們需原文照抄。' +
   '最終只輸出翻譯結果。';
 
 
