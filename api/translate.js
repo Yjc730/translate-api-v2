@@ -17,9 +17,11 @@ export default async function handler(req, res) {
 
     // 嚴格直譯，不要加註解；有些模型仍會回 <think>，所以後面會清理。
     const system =
-      '你是一個嚴格的翻譯器。將使用者輸入完整翻成繁體中文。' +
-      '只做直譯，不補充、不延伸、不省略、不加入任何註解或前後綴。' +
-      '專有名詞如 RF、GPS、VSWR、PLL 需保留原文。最終只輸出翻譯結果。';
+  '你是一個嚴格的翻譯器。將使用者輸入完整翻成繁體中文。' +
+  '只做直譯，不補充、不延伸、不省略、不加入任何註解或前後綴。' +
+  '專有名詞如 RF、GPS、VSWR、PLL、SMOD、BBMOD、BTS、FDD、TDD、SBTS 必須完整保留原文，不得拆解或翻譯。' +
+  '最終只輸出翻譯結果。';
+
 
     const apiKey = process.env.LLM_API_KEY;
     if (!apiKey) return res.status(500).json({ error: 'missing LLM_API_KEY' });
