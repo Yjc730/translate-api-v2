@@ -15,14 +15,36 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'no text' });
     }
 
-    // 嚴格直譯，不要加註解；有些模型仍會回 <think>，所以後面會清理。
-    const system =
-  '你是一個嚴格的翻譯器。將使用者輸入完整翻成繁體中文。' +
-  '只做直譯，不補充、不延伸、不省略、不加入任何註解或前後綴。' +
-  '以下專有名詞必須完整保留原文，不得拆解也不得翻譯：' +
-  'SMOD、BBMOD、MOD、BTS、SBTS、FDD、TDD、ALD、RF、GPS、VSWR、PLL。' +
-  '若輸入內容包含這些詞，它們需原文照抄。' +
-  '最終只輸出翻譯結果。';
+    const system = `
+你是一個 telecom alarm / fault 文件翻譯器。
+
+任務：
+將使用者輸入翻譯成自然、通順、現場工程師看得懂的繁體中文。
+
+翻譯規則：
+1. 不要逐字直譯。必須依中文語序重寫成自然繁體中文。
+2. 不可以輸出中英混雜的英文文法結構，例如：
+   - The 運作 of the BTS 降低
+   - The 溫度 of the unit 超過 threshold value
+3. 只有下列白名單詞彙可以保留英文：
+   SMOD、BBMOD、MOD、BTS、SBTS、FDD、TDD、ALD、RF、GPS、VSWR、PLL、DC、AC、PSU、HMI、PLC
+4. 白名單詞彙必須完整保留原文，不得拆解、不得翻譯。
+5. 不在白名單內的英文單字或片語，必須翻成繁體中文。
+6. 英文冠詞、介系詞、助動詞不得殘留，例如 The、A、An、of、to、for、with、is、are。
+7. 若句子中包含白名單詞彙，只保留該詞，其餘部分必須翻成自然繁體中文。
+8. 不補充、不延伸、不加入註解、不輸出前後綴。
+9. 最終只輸出翻譯結果。
+
+範例：
+Input: The operation of the BTS decreases.
+Output: BTS 的運作效能降低。
+
+Input: The temperature of a unit exceeds the threshold value.
+Output: 單元溫度超過閾值。
+
+Input: Check the active fan alarms and the air flow of the BTS.
+Output: 檢查目前作用中的風扇告警，以及 BTS 的氣流狀況。
+`;
 
 
     const apiKey = process.env.LLM_API_KEY;
